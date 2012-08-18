@@ -1,6 +1,6 @@
 var fs = require('fs');
 var path = require('path');
-var findit = require('findit');
+var walk = require('walkdir');
 var Seq = require('seq');
 
 module.exports = function (target, dir, optsOrEx) {
@@ -50,7 +50,7 @@ module.exports = function (target, dir, optsOrEx) {
                                 xs.forEach(function (x) {
                                     var f = path.resolve(file, x);
                                     if (fs.statSync(f).isDirectory()) {
-                                        findit.sync(f, finder);
+                                        walk.sync(f, finder);
                                     }
                                     else if (files.indexOf(f) < 0) {
                                         files.push(f);
@@ -84,7 +84,7 @@ module.exports = function (target, dir, optsOrEx) {
         }
         
         finder(dir, { isDirectory : function () { return true }});
-        findit.sync(dir, finder);
+        walk.sync(dir, finder);
         
         var include = function (files) {
             var dst = path.normalize('/node_modules/' + target);
